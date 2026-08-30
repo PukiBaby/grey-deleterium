@@ -4,8 +4,6 @@
 
 #include "blaberotatos-lib/api/drivetrain.hpp"
 
-#include "ports.hpp"
-
 #include <cmath>
 #include <algorithm>
 #include <vector>
@@ -43,7 +41,7 @@ tank_drivetrain::arcade(double speed, double turn) // Positive value of turn = g
     return arcade_drive_data;
 }
 
-tank_drivetrain& tank_drivetrain::spin(double intensity, double timeout_ms)
+tank_drivetrain& tank_drivetrain::spin(double intensity, double timeout_ms) // No need for default values in the .cpp file
 {
     std::uint32_t start = pros::millis();
     while (pros::millis() - start < timeout_ms)
