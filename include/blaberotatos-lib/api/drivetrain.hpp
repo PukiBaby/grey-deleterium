@@ -2,6 +2,9 @@
 
 #include "pros/motors.hpp"
 
+#include <vector>
+#include <cstdint>
+
 class tank_drivetrain
 {
     private: // Motor groups should be hidden at a lower level of abstraction
@@ -9,7 +12,8 @@ class tank_drivetrain
 	    pros::MotorGroup right_motor_group;
     
     public:
-        tank_drivetrain();
+        tank_drivetrain(std::vector<std::int8_t> left_ports, // {PORT_L1, PORT_L2, PORT_L3}
+                        std::vector<std::int8_t> right_ports); // {PORT_R1, PORT_R2, PORT_R3}
 
         struct tank_drive_data_struct 
         {
@@ -17,7 +21,7 @@ class tank_drivetrain
             double right;
         };
 
-        int move(tank_drive_data_struct tankDriveData);
+        int drive(tank_drive_data_struct tank_drive_data);
 
         tank_drive_data_struct arcade(double speed, double turn);
 };

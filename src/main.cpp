@@ -79,13 +79,13 @@ void autonomous() {}
  */
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	tank_drivetrain tank_drivetrain;
+	tank_drivetrain drivetrain({PORT_L1, PORT_L2, PORT_L3}, {PORT_R1, PORT_R2, PORT_R3});
 
 	while (true) {
-		tank_drivetrain.move(
-			tank_drivetrain.arcade(master.get_analog(ANALOG_LEFT_Y)/127.0, // Note that in C++, doubles that have the same value as integers must be written .0 to indicate that we are doing operations with a double 
+		drivetrain.drive(
+			drivetrain.arcade(master.get_analog(ANALOG_LEFT_Y)/127.0, // Note that in C++, doubles that have the same value as integers must be written .0 to indicate that we are doing operations with a double 
 			master.get_analog(ANALOG_RIGHT_X)/127.0) // Normalizing to the range from -1.0 to 1.0
-		); // I was hoping for a structure more like tank_drivetrain.move().arcade() -- I should probably refactor that code
+		); // I was hoping for a structure more like drivetrain.move().arcade() -- I should probably refactor that code
 		pros::delay(20);
 	}
 }
