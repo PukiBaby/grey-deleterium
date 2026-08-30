@@ -24,4 +24,6 @@ class tank_drivetrain
         int drive(tank_drive_data_struct tank_drive_data);
 
         static tank_drive_data_struct arcade(double speed, double turn);
+
+        tank_drivetrain& spin(double intensity, double timeout_ms);
 };

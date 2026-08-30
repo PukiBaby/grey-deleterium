@@ -81,6 +81,9 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	tank_drivetrain drivetrain({PORT_L1, PORT_L2, PORT_L3}, {PORT_R1, PORT_R2, PORT_R3});
 
+	drivetrain.spin(-0.25, 2000)
+			  .spin(0.25, 2000); // testing motion chaining
+
 	while (true) {
 		auto // Tells the compiler to infer the type from the initializer (identical to tank_drivetrain::tank_drive_data_struct)
 		inputs = tank_drivetrain::arcade(master.get_analog(ANALOG_LEFT_Y)/127.0, // Note that in C++, doubles that have the same value as integers must be written .0 to indicate that we are doing operations with a double 

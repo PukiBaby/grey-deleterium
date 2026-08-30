@@ -42,3 +42,14 @@ tank_drivetrain::arcade(double speed, double turn) // Positive value of turn = g
 
     return arcade_drive_data;
 }
+
+tank_drivetrain& tank_drivetrain::spin(double intensity, double timeout_ms)
+{
+    std::uint32_t start = pros::millis();
+    while (pros::millis() - start < timeout_ms)
+    {
+        drive(arcade(0.0, intensity));
+        pros::delay(20);
+    }
+    return *this;
+}
