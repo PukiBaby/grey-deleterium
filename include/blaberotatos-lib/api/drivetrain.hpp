@@ -23,5 +23,5 @@ class tank_drivetrain
 
         int drive(tank_drive_data_struct tank_drive_data);
 
-        tank_drive_data_struct arcade(double speed, double turn);
+        static tank_drive_data_struct arcade(double speed, double turn);
 };

@@ -82,10 +82,10 @@ void opcontrol() {
 	tank_drivetrain drivetrain({PORT_L1, PORT_L2, PORT_L3}, {PORT_R1, PORT_R2, PORT_R3});
 
 	while (true) {
-		drivetrain.drive(
-			drivetrain.arcade(master.get_analog(ANALOG_LEFT_Y)/127.0, // Note that in C++, doubles that have the same value as integers must be written .0 to indicate that we are doing operations with a double 
-			master.get_analog(ANALOG_RIGHT_X)/127.0) // Normalizing to the range from -1.0 to 1.0
-		); // I was hoping for a structure more like drivetrain.move().arcade() -- I should probably refactor that code
+		auto // Tells the compiler to infer the type from the initializer (identical to tank_drivetrain::tank_drive_data_struct)
+		inputs = tank_drivetrain::arcade(master.get_analog(ANALOG_LEFT_Y)/127.0, // Note that in C++, doubles that have the same value as integers must be written .0 to indicate that we are doing operations with a double 
+																master.get_analog(ANALOG_RIGHT_X)/127.0); // Normalizing to the range from -1.0 to 1.0
+		drivetrain.drive(inputs); 
 		pros::delay(20);
 	}
 }
