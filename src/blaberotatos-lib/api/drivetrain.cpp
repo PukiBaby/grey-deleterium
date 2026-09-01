@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <vector>
 #include <cstdint>
+#include <atomic>
 
 // Constructor using a member initializer list
 // I cannot just use this https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Named_Parameter for the motor groups because PROS motor groups have no default constructors (they cannot be initialized and then be fed the values later)
@@ -41,13 +42,16 @@ tank_drivetrain::arcade(double speed, double turn) // Positive value of turn = g
     return arcade_drive_data;
 }
 
-tank_drivetrain& tank_drivetrain::spin(double intensity, double timeout_ms) // No need for default values in the .cpp file
+tank_drivetrain& tank_drivetrain::spin(double intensity, double timeout_ms, std::atomic<bool>& abort_requested) // No need for default values in the .cpp file
 {
     std::uint32_t start = pros::millis();
-    while (pros::millis() - start < timeout_ms)
+    while (pros::millis() - start < timeout_ms && !abort_requested)
     {
         drive(arcade(0.0, intensity));
         pros::delay(20);
     }
+
+    drive({0.0, 0.0});
+
     return *this;
 }

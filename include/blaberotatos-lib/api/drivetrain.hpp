@@ -25,5 +25,6 @@ class tank_drivetrain
 
         static tank_drive_data_struct arcade(double speed, double turn);
 
-        tank_drivetrain& spin(double intensity, double timeout_ms);
+        tank_drivetrain& spin(double intensity, double timeout_ms, 
+                              std::atomic<bool>& abort_requested); // pass the variable by reference
 };
