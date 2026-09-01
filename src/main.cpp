@@ -6,15 +6,13 @@
 
 #include <atomic>
 
+// Setup for the macro (I kept this one outside because if I make a macro class, it should not be involved with the drivetrain)
+std::atomic<bool> macro_running{false};
+
 // Setup for the drivetrain
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 tank_drivetrain drivetrain({PORT_L1, PORT_L2, PORT_L3}, {PORT_R1, PORT_R2, PORT_R3});
-
-// Setup for macros
-
-std::atomic<bool> abort_requested{false}; // Initialize with a default value to prevent stale aborts
-std::atomic<bool> macro_running{false};
 
 /**
  * A callback function for LLEMU's center button.
@@ -83,8 +81,8 @@ void autonomous()
 
 void macro_routine()
 {
-	drivetrain.spin(-0.25, 2000, abort_requested)
-			  .spin(0.25, 2000, abort_requested); // Testing motion chaining
+	drivetrain.spin(-0.25, 2000)
+			  .spin(0.25, 2000); // Testing motion chaining
 }
 
 void macro_worker()
@@ -122,7 +120,7 @@ void opcontrol()
 		{
 			if (master.get_digital(DIGITAL_B)) 
 			{
-				abort_requested = true;
+				drivetrain.abort_requested = true;
 				pros::lcd::print(0, "Abort requested");
 			}
 		}
@@ -130,7 +128,7 @@ void opcontrol()
 		{
 			if (master.get_digital(DIGITAL_A))
 			{
-				abort_requested = false;
+				drivetrain.abort_requested = false;
 				macro_running  = true;
 				macro_task.notify();
 				continue; // Skip the rest of the drivetrain code and go to the while loop's beginning

@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <atomic>
 
 class tank_drivetrain
 {
@@ -15,6 +16,8 @@ class tank_drivetrain
         tank_drivetrain(std::vector<std::int8_t> left_ports, // {PORT_L1, PORT_L2, PORT_L3}
                         std::vector<std::int8_t> right_ports); // {PORT_R1, PORT_R2, PORT_R3}
 
+        std::atomic<bool> abort_requested{false}; // Initialize with a default value to prevent stale aborts
+
         struct tank_drive_data_struct 
         {
             double left;
@@ -25,6 +28,5 @@ class tank_drivetrain
 
         static tank_drive_data_struct arcade(double speed, double turn);
 
-        tank_drivetrain& spin(double intensity, double timeout_ms, 
-                              std::atomic<bool>& abort_requested); // pass the variable by reference
+        tank_drivetrain& spin(double intensity, double timeout_ms);
 };
