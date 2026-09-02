@@ -1,13 +1,11 @@
 #include "main.h"
 
 #include "blaberotatos-lib/api/drivetrain.hpp"
+#include "blaberotatos-lib/api/macros.hpp"
 
 #include "ports.hpp"
 
 #include <atomic>
-
-// Setup for the macro (I kept this one outside because if I make a macro class, it should not be involved with the drivetrain)
-std::atomic<bool> macro_running{false};
 
 // Setup for the drivetrain
 
@@ -85,17 +83,9 @@ void macro_routine()
 			  .spin(0.25, 2000); // Testing motion chaining
 }
 
-void macro_worker()
+void reset_function()
 {
-	while (true) // Makes the macro_task reusable
-	{
-		// Using cooperative cancellation rather than just killing the task
-		pros::Task::notify_take(true, // Zeros the notification counter when the task wakes up
-								TIMEOUT_MAX);
-		drivetrain.drive({0, 0});
-		macro_routine();
-		macro_running = false;
-	}
+	drivetrain.drive({0, 0}); // Stops the robot after the end of an automatic movement
 }
 
 /**
@@ -113,10 +103,13 @@ void macro_worker()
  */
 void opcontrol() 
 {
-	static pros::Task macro_task(macro_worker);
+	static macro_class drivetrain_interruptable_macro{};
+
+	drivetrain_interruptable_macro.start(&macro_routine, &reset_function);
+	
 	while (true) 
 	{
-		if (macro_running)
+		if (drivetrain_interruptable_macro.macro_running)
 		{
 			if (master.get_digital(DIGITAL_B)) 
 			{
@@ -129,8 +122,7 @@ void opcontrol()
 			if (master.get_digital(DIGITAL_A))
 			{
 				drivetrain.abort_requested = false;
-				macro_running  = true;
-				macro_task.notify();
+				drivetrain_interruptable_macro.run(); // Sets macro_running = true and notifies the task
 				continue; // Skip the rest of the drivetrain code and go to the while loop's beginning
 			}
 
