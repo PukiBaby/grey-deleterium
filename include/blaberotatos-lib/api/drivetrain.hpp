@@ -1,3 +1,5 @@
+#pragma once
+
 #include "main.h"
 
 #include "pros/motors.hpp"
@@ -29,4 +31,7 @@ class tank_drivetrain
         static tank_drive_data_struct arcade(double speed, double turn);
 
         tank_drivetrain& spin(double intensity, double timeout_ms);
+
+        double left_motor_group_position_degrees(); // not const: get_positions() isn't (motors.hpp:1213)
+        double right_motor_group_position_degrees();
 };

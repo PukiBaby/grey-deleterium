@@ -109,6 +109,8 @@ void opcontrol()
 	
 	while (true) 
 	{
+		pros::lcd::print(3, "Brain Detects microSD Card: %d", pros::usd::is_installed());
+
 		if (drivetrain_interruptable_macro.macro_running)
 		{
 			if (master.get_digital(DIGITAL_B)) 

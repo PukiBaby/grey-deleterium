@@ -8,5 +8,7 @@
 #define PORT_R2 -12
 #define PORT_R3 13
 
-#define PORT_VERTICAL_ODOM // Positive is the robot's forward
-#define PORT_HORIZONTAL_ODOM // Positive is the robot's right
+#define PORT_VERTICAL_ODOM  19 // Positive is the robot's forward
+#define PORT_HORIZONTAL_ODOM 20 // Positive is the robot's right
+
+#define PORT_IMU 21
